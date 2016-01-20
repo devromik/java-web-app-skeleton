@@ -1,0 +1,11 @@
+---
+- assert:
+    that:
+      - app_port != ''
+      - app_jmx_port != ''
+
+  name: Ensure JVM-properties
+  tags:
+    - start
+    - start app
+    - check_vars

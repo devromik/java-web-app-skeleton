@@ -1,0 +1,22 @@
+---
+- include: init.yml
+
+- name: check if App has been installed
+  register: st
+  stat:
+    path: '{{app_install_dir}}/app/bin/app.sh'
+  tags:
+    - start app
+    - start
+
+- fail: msg="App has not been installed"
+  when: st.stat.exists != True
+  tags:
+    - start app
+    - start
+
+- name: start App
+  shell: ./app.sh start -Dport='{{app_port}}' -Dcom.sun.management.jmxremote.port='{{app_jmx_port}}' chdir={{app_install_dir}}/app/bin
+  tags:
+    - start app
+    - start

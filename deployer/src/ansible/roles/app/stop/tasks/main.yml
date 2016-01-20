@@ -1,0 +1,23 @@
+---
+- include: init.yml
+
+- name: check if App has been already installed
+  register: st
+  stat:
+    path: '{{app_install_dir}}/app/bin/app.sh'
+  tags:
+    - stop App
+    - stop 
+
+- debug: msg="App has not been installed"
+  when: st.stat.exists != True
+  tags:
+    - stop App
+    - stop 
+
+- name: stop App
+  shell: 'cd {{app_install_dir}}/app/bin && ./app.sh stop'
+  tags:
+    - stop App
+    - stop  
+  ignore_errors: True

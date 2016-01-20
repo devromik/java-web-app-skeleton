@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <jmxConfigurator/>
+
+    <evaluator name="exceptionOccurrenceEvaluator">
+        <expression>logger.contains("throwable")</expression>
+    </evaluator>
+
+    <appender name="fileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logDir}/app.log</file>
+
+        <encoder>
+            <pattern>[%d{yyyy.MM.dd HH:mm:ss.SSS}] [%-5level] [%thread] [%class.%method\(\) at line %line]\t\t%message%n%xException{full, exceptionOccurrenceEvaluator}</pattern>
+        </encoder>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logDir}/app_%d{yyyy-MM-dd}_%i.log</fileNamePattern>
+            <maxHistory>10</maxHistory>
+
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>100MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="springFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logDir}/spring.log</file>
+
+        <encoder>
+            <pattern>[%d{yyyy.MM.dd HH:mm:ss.SSS}] [%-5level] [%thread] [%class.%method\(\) at line %line]\t\t%message%n%xException{full, exceptionOccurrenceEvaluator}</pattern>
+        </encoder>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logDir}/spring_%d{yyyy-MM-dd}_%i.log</fileNamePattern>
+            <maxHistory>10</maxHistory>
+
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>100MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="jettyFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logDir}/jetty.log</file>
+
+        <encoder>
+            <pattern>[%d{yyyy.MM.dd HH:mm:ss.SSS}] [%-5level] [%thread] [%class.%method\(\) at line %line]\t\t%message%n%xException{full, exceptionOccurrenceEvaluator}</pattern>
+        </encoder>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logDir}/jetty_%d{yyyy-MM-dd}_%i.log</fileNamePattern>
+            <maxHistory>10</maxHistory>
+
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>100MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
+    <logger name="org.springframework" additivity="false">
+        <appender-ref ref="springFileAppender"/>
+        <level value="WARN"/>
+    </logger>
+
+    <logger name="org.eclipse.jetty" additivity="false">
+        <appender-ref ref="jettyFileAppender"/>
+        <level value="WARN"/>
+    </logger>
+
+    <logger name="org.apache" level="ERROR" additivity="false"/>
+
+    <root level="INFO">
+        <appender-ref ref="fileAppender"/>
+    </root>
+</configuration>

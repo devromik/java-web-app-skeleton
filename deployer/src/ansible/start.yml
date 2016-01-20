@@ -1,0 +1,6 @@
+---
+- name: start App
+  hosts: app
+  roles:
+    - { role: app/start,
+        tags: ["start", "start app"] }

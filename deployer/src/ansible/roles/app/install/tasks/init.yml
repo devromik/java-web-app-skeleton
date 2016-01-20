@@ -1,0 +1,9 @@
+---
+- assert:
+    that:
+      - app_distr != ''
+      - app_install_dir != ''
+    tags:
+      - check_vars
+      - install
+      - install app

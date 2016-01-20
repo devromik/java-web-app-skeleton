@@ -1,0 +1,9 @@
+---
+- assert:
+    that:
+      - app_install_dir != ''
+  name: Ensure that all the variables are present
+  tags:
+    - stop 
+    - stop app
+    - check_vars

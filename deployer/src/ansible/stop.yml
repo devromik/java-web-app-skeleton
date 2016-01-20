@@ -1,0 +1,6 @@
+---
+- name: stop App
+  hosts: app
+  roles:
+    - { role: app/stop,
+        tags: ["stop", "stop app"] }

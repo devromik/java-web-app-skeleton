@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <jmxConfigurator/>
+
+    <evaluator name="exceptionOccurrenceEvaluator">
+        <expression>logger.contains("throwable")</expression>
+    </evaluator>
+
+    <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>[%d{yyyy.MM.dd HH:mm:ss.SSS}] [%-5level] [%thread] [%class.%method\(\) at line %line]\t\t%message%n%xException{full, exceptionOccurrenceEvaluator}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="fileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logDir}/deployer.log</file>
+
+        <encoder>
+            <pattern>[%d{yyyy.MM.dd HH:mm:ss.SSS}] [%-5level] [%thread] [%class.%method\(\) at line %line]\t\t%message%n%xException{full, exceptionOccurrenceEvaluator}</pattern>
+        </encoder>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logDir}/deployer_%d{yyyy-MM-dd}_%i.log</fileNamePattern>
+            <maxHistory>10</maxHistory>
+
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>100MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="consoleAppender"/>
+        <appender-ref ref="fileAppender"/>
+    </root>
+</configuration>

@@ -1,0 +1,6 @@
+---
+- name: install App
+  hosts: app
+  roles:
+    - { role: app/install,
+        tags: ["install", "install app"] }

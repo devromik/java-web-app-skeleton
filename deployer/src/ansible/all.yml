@@ -1,0 +1,24 @@
+---
+- name: install App
+  hosts: app
+  roles:
+    - { role: app/install,
+        tags: ["install", "install app"] }
+        
+- name: update App
+  hosts: app
+  roles:
+    - { role: app/update,
+        tags: ["update", "update app"] }
+          
+- name: start App
+  hosts: app
+  roles:
+    - { role: app/start,
+        tags: ["start", "start app"] }
+
+- name: stop App
+  hosts: app
+  roles:
+    - { role:  app/stop,
+        tags: ["stop", "stop app"] }

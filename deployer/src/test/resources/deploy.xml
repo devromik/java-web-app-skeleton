@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <ansible>
+        <ansible_ssh_user>userName</ansible_ssh_user>
+        <ansible_ssh_pass>password</ansible_ssh_pass>
+    </ansible>
+
+    <distrs>
+        <app>
+            <from>/usr/distrs/app.zip</from>
+            <to>/usr/share/app</to>
+        </app>
+    </distrs>
+
+    <hosts>
+        <group name="app">
+            <host name="192.168.1.101" port="51235"/>
+            <host name="192.168.1.102" port="51237"/>
+            <host name="192.168.1.103" port="51239"/>
+        </group>
+    </hosts>
+</config>

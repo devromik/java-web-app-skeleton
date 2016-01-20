@@ -1,0 +1,38 @@
+---
+- include: init.yml
+
+- name: create installation directory
+  file:
+    path: '{{app_install_dir}}'
+    state: directory
+  tags:
+    - update app
+    - update
+
+- name: check if App has been already installed
+  register: st
+  stat:
+    path: '{{app_install_dir}}/app/bin/app.sh'
+  tags:
+    - update app
+    - update
+
+- shell: rm -fr {{app_install_dir}}/app
+  when: st.stat.exists
+  tags:
+    - update app
+    - update
+    
+- name: unpack
+  unarchive:
+    src: '{{app_distr}}'
+    dest: '{{app_install_dir}}'
+  tags:
+    - update app
+    - update
+
+- file: 'path={{app_install_dir}}/app/bin/app.sh mode=a+rx'
+  name: change mode for the control script
+  tags:
+    - update app
+    - update
