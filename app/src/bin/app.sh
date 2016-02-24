@@ -97,10 +97,10 @@ case "$1" in
         fi
     fi
         
-    eval exec nohup java -classpath "${CLASSPATH}" ${JVM_PROPERTIES} "$@" ${MAIN_CLASS} > "${STARTUP_LOG_FILE}" 2>"${STARTUP_LOG_FILE}" &
+    eval exec nohup java -classpath "${CLASSPATH}" ${JVM_PROPERTIES} "$@" ${MAIN_CLASS} > "${STARTUP_LOG_FILE}" 2>"${STARTUP_LOG_FILE}" "&"
     
-    if [ ! -z ${PID_FILE} ]; then
-        echo $! > ${PID_FILE}
+    if [ ! -z "${PID_FILE}" ]; then
+        echo $! > "${PID_FILE}"
     fi
        
     echo "${APP_NAME} started"
