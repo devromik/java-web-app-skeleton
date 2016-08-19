@@ -66,7 +66,7 @@ public abstract class HttpApi_FuncTest {
     // ****************************** //
 
     private static String makeBaseUrl() {
-        return "http://" + getJettyHostName() + ":" + getJettyPort() + APP_HTTP_API_URI_PREFIX + "/";
+        return "http://" + jettyHostName() + ":" + jettyPort() + APP_HTTP_API_URI_PREFIX + "/";
     }
 
     private static String makeRequestUrl(String urlPartAfterBase) {

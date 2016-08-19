@@ -7,7 +7,7 @@ import org.junit.*;
 import static com.google.common.base.Preconditions.*;
 import static javax.management.MBeanServerFactory.*;
 import net.devromik.app.*;
-import static net.devromik.app.Launcher.SPRING_CONTEXT_CONFIG_LOCATION;
+import static net.devromik.app.Launcher.WEB_APP_CONTEXT_CONFIG_LOCATION;
 
 /**
  * @author Shulnyaev Roman
@@ -106,7 +106,7 @@ public abstract class MBeanTest {
 
     private static ObjectName makeMBeanObjectNameForMBeanName(String mBeanName) {
         try {
-            return new ObjectName(SPRING_CONTEXT_CONFIG_LOCATION, "name", mBeanName);
+            return new ObjectName(WEB_APP_CONTEXT_CONFIG_LOCATION, "name", mBeanName);
         }
         catch (MalformedObjectNameException exception) {
             throw new AppException(exception);

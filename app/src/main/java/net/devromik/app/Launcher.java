@@ -5,17 +5,16 @@ import javax.servlet.DispatcherType;
 import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.servlet.*;
 import org.slf4j.*;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.web.context.*;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.DispatcherServlet;
+import static com.google.common.base.Charsets.UTF_8;
 import static com.google.common.primitives.Ints.tryParse;
 import static java.util.EnumSet.allOf;
 import static net.devromik.slf4jUtils.Slf4jUtils.logException;
 import static net.devromik.app.AppInstanceInfo.APP_NAME;
 import static net.devromik.app.utils.net.LocalhostInfo.getLocalhost;
-import static org.apache.commons.lang3.exception.ExceptionUtils.getStackTrace;
 import static org.eclipse.jetty.util.resource.Resource.newClassPathResource;
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -24,7 +23,7 @@ import static org.slf4j.LoggerFactory.getLogger;
  */
 public final class Launcher {
 
-    public static final String SPRING_CONTEXT_CONFIG_LOCATION = Launcher.class.getPackage().getName();
+    public static final String WEB_APP_CONTEXT_CONFIG_LOCATION = Launcher.class.getPackage().getName();
     public static final String WEB_APP_CONTEXT_PATH = "/";
 
     public static final String JETTY_PORT_JVM_PROPERTY_NAME = "port";
@@ -62,64 +61,79 @@ public final class Launcher {
         try {
             server.setHandler(buildServletContextHandler());
             server.start();
-            logger.info("{} started [port = {}]", APP_NAME, getJettyPort());
+            logger.info("{} started at port = {}", APP_NAME, jettyPort());
 
             if (needWaitForJettyStopped) {
                 waitForJettyStopped();
             }
         }
         catch (Exception exception) {
-            handleLaunchError(exception);
+            handleLaunch(exception);
         }
     }
 
-    public static synchronized String getJettyHostName() {
-        return getLocalhost();
-    }
-
-    public static synchronized int getJettyPort() {
-        return getJettyConnector().getLocalPort();
+    static void handleLaunch(Exception exception) {
+        logException(logger, exception, "Error occurred during {} starting", APP_NAME);
+        stopJettySilently();
     }
 
     // ****************************** //
 
-    private static void handleLaunchError(Exception launchException) {
-        logException(logger, launchException, "Error occurred during {} starting", APP_NAME);
-        stopJettySilently();
+    public static String jettyHostName() {
+        return getLocalhost();
     }
 
-    private static ServletContextHandler buildServletContextHandler() throws IOException {
+    public static synchronized int jettyPort() {
+        return jettyConnector().getLocalPort();
+    }
+
+    static ServerConnector jettyConnector() {
+        return (ServerConnector)server.getConnectors()[0];
+    }
+
+    // ****************************** //
+
+    static ServletContextHandler buildServletContextHandler() throws IOException {
+        ServletContextHandler handler = new ServletContextHandler();
+
+        handler.setContextPath(WEB_APP_CONTEXT_PATH);
+        handler.setBaseResource(newClassPathResource("webapp"));
+
         WebApplicationContext webAppContext = buildWebAppContext();
-        ServletContextHandler servletContextHandler = new ServletContextHandler();
-        servletContextHandler.setContextPath(WEB_APP_CONTEXT_PATH);
-        servletContextHandler.setResourceBase(new ClassPathResource("webapp").getURI().toString());
-        servletContextHandler.setBaseResource(newClassPathResource("webapp"));
-        servletContextHandler.addServlet(new ServletHolder(new DispatcherServlet(webAppContext)), "/*");
-        servletContextHandler.addEventListener(new ContextLoaderListener(webAppContext));
-        servletContextHandler.setErrorHandler(null);
-        addUtf8EncodingFilter(servletContextHandler);
+        handler.addServlet(new ServletHolder(new DispatcherServlet(webAppContext)), "/*");
+        handler.addEventListener(new ContextLoaderListener(webAppContext));
 
-        return servletContextHandler;
+        handler.setErrorHandler(null);
+        addUtf8EncodingFilterTo(handler);
+
+        return handler;
     }
 
-    private static WebApplicationContext buildWebAppContext() {
+    static WebApplicationContext buildWebAppContext() {
         AnnotationConfigWebApplicationContext webAppContext = new AnnotationConfigWebApplicationContext();
-        webAppContext.setConfigLocation(SPRING_CONTEXT_CONFIG_LOCATION);
+        webAppContext.setConfigLocation(WEB_APP_CONTEXT_CONFIG_LOCATION);
 
         return webAppContext;
     }
 
-    private static void addUtf8EncodingFilter(ServletContextHandler servletContextHandler) {
-        CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
-        characterEncodingFilter.setEncoding("UTF-8");
-        servletContextHandler.addFilter(new FilterHolder(characterEncodingFilter), "/*", allOf(DispatcherType.class));
+    static void addUtf8EncodingFilterTo(ServletContextHandler handler) {
+        CharacterEncodingFilter filter = new CharacterEncodingFilter();
+        filter.setEncoding(UTF_8.name());
+        handler.addFilter(new FilterHolder(filter), "/*", allOf(DispatcherType.class));
     }
 
-    private static ServerConnector getJettyConnector() {
-        return (ServerConnector)server.getConnectors()[0];
+    // ****************************** //
+
+    static void stopJettySilently() {
+        try {
+            server.stop();
+        }
+        catch (Exception exception) {
+            logException(logger, exception);
+        }
     }
 
-    private static void waitForJettyStopped() {
+    static void waitForJettyStopped() {
         try {
             server.join();
             server = null;
@@ -132,18 +146,8 @@ public final class Launcher {
         }
     }
 
-    private static void stopJettySilently() {
-        try {
-            server.stop();
-        }
-        catch (Exception exception) {
-            logger.debug(getStackTrace(exception));
-        }
-    }
-
     // ****************************** //
 
-    private static Server server;
-    private static final Logger logger = getLogger(Launcher.class);
+    static Server server;
+    static final Logger logger = getLogger(Launcher.class);
 }
-
