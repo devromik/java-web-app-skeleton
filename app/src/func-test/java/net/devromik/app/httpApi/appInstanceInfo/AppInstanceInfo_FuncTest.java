@@ -19,7 +19,7 @@ public class AppInstanceInfo_FuncTest extends HttpApi_FuncTest {
     public void youCanGetAppInstanceInfo() throws Exception {
         JsonNode responseJsonNode = getForJsonNode("appInstanceInfo");
         AppInstanceInfoResponse response = fromNode(responseJsonNode, AppInstanceInfoResponse.class);
-        assertThat(response.getStatus(), is(SUCCESS));
+        assertThat(response.status(), is(SUCCESS));
 
         AppInstanceInfo info = response.appInstanceInfo();
         AppInstanceInfo expectedInfo = new AppInstanceInfo(localStartUpTime(), "func-test");

@@ -17,18 +17,26 @@ public final class StatusJsonSerializer extends JsonSerializer<Status> {
         SerializerProvider provider) throws IOException {
 
         writer.writeStartObject();
-        writer.writeNumberField(CODE_JSON_ATTR_NAME, status.getCode().getCode());
 
+        writeCode(status, writer);
+        writeMessage(status, writer);
+
+        writer.writeEndObject();
+    }
+
+    void writeCode(Status status, JsonGenerator writer) throws IOException {
+        writer.writeNumberField(CODE_JSON_ATTR_NAME, status.code().code());
+    }
+
+    void writeMessage(Status status, JsonGenerator writer) throws IOException {
         if (status.hasMessage()) {
-            writer.writeStringField(MESSAGE_JSON_ATTR_NAME, status.getMessage());
+            writer.writeStringField(MESSAGE_JSON_ATTR_NAME, status.message());
         }
-        else if (status.getCode().hasDefaultMessage()) {
-            writer.writeStringField(MESSAGE_JSON_ATTR_NAME, status.getCode().getDefaultMessage());
+        else if (status.code().hasDefaultMessage()) {
+            writer.writeStringField(MESSAGE_JSON_ATTR_NAME, status.code().defaultMessage());
         }
         else {
             writer.writeNullField(MESSAGE_JSON_ATTR_NAME);
         }
-
-        writer.writeEndObject();
     }
 }

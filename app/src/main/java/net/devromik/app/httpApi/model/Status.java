@@ -20,7 +20,7 @@ public final class Status {
     // ****************************** //
 
     public Status(StatusCode code) {
-        this(code, code.getDefaultMessage());
+        this(code, code.defaultMessage());
     }
 
     public Status(StatusCode code, String message) {
@@ -28,7 +28,7 @@ public final class Status {
         this.message = message;
     }
 
-    public StatusCode getCode() {
+    public StatusCode code() {
         return code;
     }
 
@@ -36,7 +36,7 @@ public final class Status {
         return message != null;
     }
 
-    public String getMessage() {
+    public String message() {
         return message;
     }
 
@@ -56,11 +56,11 @@ public final class Status {
             return false;
         }
 
-        Status otherStatus = (Status)other;
+        Status that = (Status)other;
 
         return
-            code.equals(otherStatus.code) &&
-            Objects.equals(message, otherStatus.message);
+            code.equals(that.code) &&
+            Objects.equals(message, that.message);
     }
 
     @Override
@@ -78,6 +78,6 @@ public final class Status {
 
     // ****************************** //
 
-    private final StatusCode code;
-    private final String message;
+    final StatusCode code;
+    final String message;
 }

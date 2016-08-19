@@ -9,7 +9,7 @@ import static net.devromik.app.httpApi.model.StatusCode.UNKNOWN_ERROR;
 public class AppException extends RuntimeException {
 
     public AppException(Status status) {
-        super(status.getMessage());
+        super(status.message());
         this.status = status;
     }
 

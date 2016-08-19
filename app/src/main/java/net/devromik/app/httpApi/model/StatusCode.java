@@ -29,7 +29,7 @@ public enum StatusCode {
         this.defaultMessage = defaultMessage;
     }
 
-    public int getCode() {
+    public int code() {
         return code;
     }
 
@@ -37,12 +37,12 @@ public enum StatusCode {
         return defaultMessage != null;
     }
 
-    public String getDefaultMessage() {
+    public String defaultMessage() {
         return defaultMessage;
     }
 
     // ****************************** //
 
-    private final int code;
-    private final String defaultMessage;
+    final int code;
+    final String defaultMessage;
 }

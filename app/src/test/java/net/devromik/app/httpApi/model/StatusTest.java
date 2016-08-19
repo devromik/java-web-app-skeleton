@@ -5,7 +5,6 @@ import org.junit.Test;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.IntNode;
 import static net.devromik.app.httpApi.model.StatusCode.*;
-import net.devromik.app.utils.json.JsonUtils;
 import static net.devromik.app.utils.json.JsonUtils.*;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
@@ -38,7 +37,7 @@ public class StatusTest {
 
         assertThat(statusJsonNode.get("code"), instanceOf(IntNode.class));
         assertThat(forCode(statusJsonNode.get("code").asInt()), is(SUCCESS));
-        assertThat(statusJsonNode.get("message").asText(), is(SUCCESS.getDefaultMessage()));
+        assertThat(statusJsonNode.get("message").asText(), is(SUCCESS.defaultMessage()));
 
         // ****************************** //
 
@@ -72,29 +71,29 @@ public class StatusTest {
     @Test
     public void canBeDeserializedFromJson() throws Exception {
         Status status = new Status(SUCCESS, "ok");
-        String statusJson = JsonUtils.toJson(status);
+        String statusJson = toJson(status);
         status = fromJson(statusJson, Status.class);
 
-        assertThat(status.getCode(), is(SUCCESS));
-        assertThat(status.getMessage(), is("ok"));
+        assertThat(status.code(), is(SUCCESS));
+        assertThat(status.message(), is("ok"));
 
         // ****************************** //
 
         status = new Status(UNKNOWN_ERROR, "Unknown error");
-        statusJson = JsonUtils.toJson(status);
+        statusJson = toJson(status);
         status = fromJson(statusJson, Status.class);
 
-        assertThat(status.getCode(), is(UNKNOWN_ERROR));
-        assertThat(status.getMessage(), is("Unknown error"));
+        assertThat(status.code(), is(UNKNOWN_ERROR));
+        assertThat(status.message(), is("Unknown error"));
 
         // ****************************** //
 
         status = new Status(UNKNOWN_ERROR);
-        statusJson = JsonUtils.toJson(status);
+        statusJson = toJson(status);
         status = fromJson(statusJson, Status.class);
 
-        assertThat(status.getCode(), is(UNKNOWN_ERROR));
-        assertNull(status.getMessage());
+        assertThat(status.code(), is(UNKNOWN_ERROR));
+        assertNull(status.message());
     }
 }
 

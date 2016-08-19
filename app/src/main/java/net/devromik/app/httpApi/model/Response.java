@@ -7,16 +7,21 @@ import com.fasterxml.jackson.annotation.*;
  */
 public class Response {
 
+    public static final String STATUS_JSON_ATTR_NAME = "status";
+
+    // ****************************** //
+
     @JsonCreator
-    public Response(@JsonProperty("status") Status status) {
+    public Response(@JsonProperty(STATUS_JSON_ATTR_NAME) Status status) {
         this.status = status;
     }
 
-    public Status getStatus() {
+    @JsonGetter(STATUS_JSON_ATTR_NAME)
+    public Status status() {
         return status;
     }
 
     // ****************************** //
 
-    private final Status status;
+    final Status status;
 }

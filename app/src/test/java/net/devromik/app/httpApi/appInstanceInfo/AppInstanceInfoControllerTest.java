@@ -22,7 +22,7 @@ public class AppInstanceInfoControllerTest {
         controller.init();
 
         AppInstanceInfoResponse response = controller.appInstanceInfo();
-        assertThat(response.getStatus(), is(Status.SUCCESS));
+        assertThat(response.status(), is(Status.SUCCESS));
 
         AppInstanceInfo expectedInfo = new AppInstanceInfo(now() /* is not taken into account */, "App X.X");
 

@@ -3,8 +3,8 @@ package net.devromik.app.httpApi.model;
 import java.io.IOException;
 import com.fasterxml.jackson.core.*;
 import com.fasterxml.jackson.databind.*;
-import static com.fasterxml.jackson.core.JsonToken.*;
 import static net.devromik.app.httpApi.model.Status.*;
+import static net.devromik.app.httpApi.model.StatusCode.forCode;
 
 /**
  * @author Shulnyaev Roman
@@ -12,23 +12,21 @@ import static net.devromik.app.httpApi.model.Status.*;
 public final class StatusJsonDeserializer extends JsonDeserializer<Status> {
 
     @Override
-    public Status deserialize(JsonParser parser, DeserializationContext context) throws IOException {
-        StatusCode code = null;
-        String message = null;
+    public Status deserialize(JsonParser reader, DeserializationContext context) throws IOException {
+        JsonNode statusJsonNode = reader.readValueAsTree();
 
-        while (parser.nextToken() != END_OBJECT) {
-            String attrName = parser.getCurrentName();
-
-            if (attrName.equals(CODE_JSON_ATTR_NAME)) {
-                parser.nextToken();
-                code = StatusCode.forCode(parser.getIntValue());
-            }
-            else if (attrName.equals(MESSAGE_JSON_ATTR_NAME)) {
-                JsonToken messageToken = parser.nextToken();
-                message = messageToken != VALUE_NULL ? parser.getText() : null;
-            }
-        }
+        StatusCode code = codeFrom(statusJsonNode);
+        String message = messageFrom(statusJsonNode);
 
         return new Status(code, message);
+    }
+
+    StatusCode codeFrom(JsonNode statusJsonNode) {
+        return forCode(statusJsonNode.get(CODE_JSON_ATTR_NAME).intValue());
+    }
+
+    String messageFrom(JsonNode statusJsonNode) {
+        JsonNode messageJsonNode = statusJsonNode.get(MESSAGE_JSON_ATTR_NAME);
+        return messageJsonNode != null ? messageJsonNode.textValue() : null;
     }
 }

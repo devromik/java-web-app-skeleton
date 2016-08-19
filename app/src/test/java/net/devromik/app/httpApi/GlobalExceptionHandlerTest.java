@@ -13,7 +13,7 @@ import static org.mockito.Mockito.*;
 public class GlobalExceptionHandlerTest {
 
     @Before
-    public void beforeTest() {
+    public void beforeEachTest() {
         request = mock(HttpServletRequest.class);
         when(request.getRequestURL()).thenReturn(new StringBuffer("url"));
 
@@ -31,25 +31,25 @@ public class GlobalExceptionHandlerTest {
         Status status = new Status(StatusCode.SUCCESS, "ok");
         Exception exception = new AppException(status);
         Response response = handler.handle(request, exception);
-        assertThat(response.getStatus(), is(status));
+        assertThat(response.status(), is(status));
     }
 
     @Test
     public void handles_InvalidRequestBodyJsonExceptions() throws Exception {
         Status status = new Status(StatusCode.REQUEST_BODY_NOT_VALID_JSON, "oh...");
         Response response = handler.handle(request, httpMessageNotReadableException);
-        assertThat(response.getStatus(), is(status));
+        assertThat(response.status(), is(status));
     }
 
     @Test
     public void handles_UnknownExceptions() throws Exception {
         Response response = handler.handle(request, new Exception());
-        assertThat(response.getStatus(), is(new Status(StatusCode.UNKNOWN_ERROR)));
+        assertThat(response.status(), is(new Status(StatusCode.UNKNOWN_ERROR)));
     }
 
     // ****************************** //
 
-    private GlobalExceptionHandler handler = new GlobalExceptionHandler();
-    private HttpServletRequest request;
-    private HttpMessageNotReadableException httpMessageNotReadableException;
+    GlobalExceptionHandler handler = new GlobalExceptionHandler();
+    HttpServletRequest request;
+    HttpMessageNotReadableException httpMessageNotReadableException;
 }
