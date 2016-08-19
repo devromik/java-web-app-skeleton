@@ -128,35 +128,33 @@ public class SampleMBeanImpl implements SampleMBean {
 
     // ****************************** //
 
-    private void makeTableType() throws OpenDataException {
-        tableRowType =
-            new CompositeType(
-                    "SampleTableRowType",
-                    "Row type of sample table",
-                    TABLE_COLUMN_NAMES,
-                    TABLE_COLUMN_DESCRIPTIONS,
-                    TABLE_COLUMN_TYPES);
+    void makeTableType() throws OpenDataException {
+        tableRowType = new CompositeType(
+            "SampleTableRowType",
+            "Row type of sample table",
+            TABLE_COLUMN_NAMES,
+            TABLE_COLUMN_DESCRIPTIONS,
+            TABLE_COLUMN_TYPES);
 
-        tableType =
-            new TabularType(
-                    "SampleTableType",
-                    "Type of sample table",
-                    tableRowType,
-                    TABLE_INDEX);
+        tableType = new TabularType(
+            "SampleTableType",
+            "Type of sample table",
+            tableRowType,
+            TABLE_INDEX);
     }
 
     // ****************************** //
 
-    private int intValue;
-    private int[] intArray = new int[] {};
+    int intValue;
+    int[] intArray = new int[] {};
 
-    private long longValue;
-    private long[] longArray = new long[] {};
+    long longValue;
+    long[] longArray = new long[] {};
 
-    private String stringValue;
-    private String[] stringArray = new String[] {};
+    String stringValue;
+    String[] stringArray = new String[] {};
 
-    private CompositeType tableRowType;
-    private TabularType tableType;
-    private long[] tableRowIds = new long[] {};
+    CompositeType tableRowType;
+    TabularType tableType;
+    long[] tableRowIds = new long[] {};
 }

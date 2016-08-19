@@ -10,7 +10,7 @@ import static org.hamcrest.MatcherAssert.*;
 public class SampleMBeanImplTest extends MBeanTest {
 
     @Before
-    public void beforeTest() throws OpenDataException {
+    public void beforeEachTest() throws OpenDataException {
         sample = new SampleMBeanImpl();
         registerMBean(MBEAN_NAME, sample);
     }
@@ -20,13 +20,13 @@ public class SampleMBeanImplTest extends MBeanTest {
     @Test
     public void provides_Int() {
         sample.setInt(1);
-        assertThat(getMBeanIntAttributeValue(MBEAN_NAME, "Int"), is(1));
+        assertThat(mBeanIntAttributeValue(MBEAN_NAME, "Int"), is(1));
     }
 
     @Test
     public void provides_IntArray() {
         sample.setIntArray(1, 2, 3);
-        assertThat(getMBeanIntArrayAttributeValue(MBEAN_NAME, "IntArray"), is(new int[] {1, 2, 3}));
+        assertThat(mBeanIntArrayAttributeValue(MBEAN_NAME, "IntArray"), is(new int[] {1, 2, 3}));
     }
 
     // ****************************** //
@@ -34,13 +34,13 @@ public class SampleMBeanImplTest extends MBeanTest {
     @Test
     public void provides_Long() {
         sample.setLong(1L);
-        assertThat(getMBeanLongAttributeValue(MBEAN_NAME, "Long"), is(1L));
+        assertThat(mBeanLongAttributeValue(MBEAN_NAME, "Long"), is(1L));
     }
 
     @Test
     public void provides_LongArray() {
         sample.setLongArray(1L, 2L, 3L);
-        assertThat(getMBeanLongArrayAttributeValue(MBEAN_NAME, "LongArray"), is(new long[] {1L, 2L, 3L}));
+        assertThat(mBeanLongArrayAttributeValue(MBEAN_NAME, "LongArray"), is(new long[] {1L, 2L, 3L}));
     }
 
     // ****************************** //
@@ -48,13 +48,13 @@ public class SampleMBeanImplTest extends MBeanTest {
     @Test
     public void provides_String() {
         sample.setString("A");
-        assertThat(getMBeanStringAttributeValue(MBEAN_NAME, "String"), is("A"));
+        assertThat(mBeanStringAttributeValue(MBEAN_NAME, "String"), is("A"));
     }
 
     @Test
     public void provides_StringArray() {
         sample.setStringArray("A", "B", "C");
-        assertThat(getMBeanStringArrayAttributeValue(MBEAN_NAME, "StringArray"), is(new String[] {"A", "B", "C"}));
+        assertThat(mBeanStringArrayAttributeValue(MBEAN_NAME, "StringArray"), is(new String[] {"A", "B", "C"}));
     }
 
     // ****************************** //
@@ -62,7 +62,7 @@ public class SampleMBeanImplTest extends MBeanTest {
     @Test
     public void provides_Table() throws OpenDataException {
         sample.setTableRowIds(1L, 2L, 3L, 4L, 5L);
-        TabularData table = getMBeanTableAttributeValue(MBEAN_NAME, "Table");
+        TabularData table = mBeanTableAttributeValue(MBEAN_NAME, "Table");
         assertThat(table.size(), is(5));
         int rowId = 1;
 
@@ -70,8 +70,8 @@ public class SampleMBeanImplTest extends MBeanTest {
             Object[] rowKey = ((List)rowKeyObject).toArray();
             CompositeData row = table.get(rowKey);
 
-            assertThat((long)row.get("id"), is((long)rowId));
-            assertThat((String)row.get("value"), is("V_" + rowId));
+            assertThat(row.get("id"), is((long)rowId));
+            assertThat(row.get("value"), is("V_" + rowId));
 
             ++rowId;
         }
@@ -79,5 +79,5 @@ public class SampleMBeanImplTest extends MBeanTest {
 
     // ****************************** //
 
-    private SampleMBeanImpl sample;
+    SampleMBeanImpl sample;
 }

@@ -15,13 +15,14 @@ public class AppException extends RuntimeException {
 
     public AppException(Exception cause) {
         super(cause);
+
         this.status =
             cause instanceof AppException ?
-            ((AppException)cause).getStatus() :
+            ((AppException)cause).status() :
             new Status(UNKNOWN_ERROR, cause.getMessage());
     }
 
-    public Status getStatus() {
+    public Status status() {
         return status;
     }
 

@@ -65,20 +65,20 @@ public final class JsonUtils {
 
     // ****************************** //
 
-    private static class InstanceHolder {
+    static class InstanceHolder {
         static final JsonUtils INSTANCE = new JsonUtils();
     }
 
-    private JsonUtils() {
+    JsonUtils() {
         mapper = new ObjectMapper();
         mapper.registerModule(new JodaModule());
     }
 
-    private static JsonUtils instance() {
+    static JsonUtils instance() {
         return InstanceHolder.INSTANCE;
     }
 
     // ****************************** //
 
-    private ObjectMapper mapper;
+    ObjectMapper mapper;
 }

@@ -33,7 +33,7 @@ public class GlobalExceptionHandler {
     // ****************************** //
 
     static Response handleApp(AppException exception) {
-        return new Response(exception.getStatus());
+        return new Response(exception.status());
     }
 
     static Response handleUnknown(Exception exception) {

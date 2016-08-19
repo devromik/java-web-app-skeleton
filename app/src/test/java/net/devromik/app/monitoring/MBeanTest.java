@@ -15,7 +15,7 @@ import static net.devromik.app.Launcher.WEB_APP_CONTEXT_CONFIG_LOCATION;
 public abstract class MBeanTest {
 
     @After
-    public void afterTest() {
+    public void afterEachTest() {
         for (ObjectName mBeanObjectName : mBeanNameToMBeanObjectName.values()) {
             try {
                 mBeanServer.unregisterMBean(mBeanObjectName);
@@ -32,18 +32,10 @@ public abstract class MBeanTest {
 
     protected final void registerMBean(String mBeanName, Object mBean) {
         checkState(!mBeanNameToMBeanObjectName.containsKey(mBeanName));
-        ObjectName mBeanObjectName = makeMBeanObjectNameForMBeanName(mBeanName);
+        ObjectName mBeanObjectName = mBeanObjectNameForMBeanName(mBeanName);
 
         try {
-            Class mBeanInterface = null;
-
-            for (Class mBeanInterfaceCandidate : mBean.getClass().getInterfaces()) {
-                if (mBeanInterfaceCandidate.getSimpleName().endsWith("MBean")) {
-                    mBeanInterface = mBeanInterfaceCandidate;
-                    break;
-                }
-            }
-
+            Class mBeanInterface = mBeanInterfaceOf(mBean);
             StandardMBean standardMBean = new StandardMBean(mBean, mBeanInterface);
             mBeanServer.registerMBean(standardMBean, mBeanObjectName);
             mBeanNameToMBeanObjectName.put(mBeanName, mBeanObjectName);
@@ -53,10 +45,23 @@ public abstract class MBeanTest {
         }
     }
 
+    Class mBeanInterfaceOf(Object mBean) {
+        Class mBeanInterface = null;
+
+        for (Class mBeanInterfaceCandidate : mBean.getClass().getInterfaces()) {
+            if (mBeanInterfaceCandidate.getSimpleName().endsWith("MBean")) {
+                mBeanInterface = mBeanInterfaceCandidate;
+                break;
+            }
+        }
+
+        return checkNotNull(mBeanInterface);
+    }
+
     // ****************************** //
 
-    protected final Object getMBeanAttributeValue(String mBeanName, String mBeanAttrName) {
-        ObjectName mBeanObjectName = makeMBeanObjectNameForMBeanName(mBeanName);
+    protected final Object mBeanAttributeValue(String mBeanName, String mBeanAttrName) {
+        ObjectName mBeanObjectName = mBeanObjectNameForMBeanName(mBeanName);
 
         try {
             return mBeanServer.getAttribute(mBeanObjectName, mBeanAttrName);
@@ -68,43 +73,43 @@ public abstract class MBeanTest {
 
     // ****************************** //
 
-    protected final int getMBeanIntAttributeValue(String mBeanName, String mBeanAttrName) {
-        return (int)getMBeanAttributeValue(mBeanName, mBeanAttrName);
+    protected final int mBeanIntAttributeValue(String mBeanName, String mBeanAttrName) {
+        return (int)mBeanAttributeValue(mBeanName, mBeanAttrName);
     }
 
-    protected final int[] getMBeanIntArrayAttributeValue(String mBeanName, String mBeanAttrName) {
-        return (int[])getMBeanAttributeValue(mBeanName, mBeanAttrName);
-    }
-
-    // ****************************** //
-
-    protected final long getMBeanLongAttributeValue(String mBeanName, String mBeanAttrName) {
-        return (long)getMBeanAttributeValue(mBeanName, mBeanAttrName);
-    }
-
-    protected final long[] getMBeanLongArrayAttributeValue(String mBeanName, String mBeanAttrName) {
-        return (long[])getMBeanAttributeValue(mBeanName, mBeanAttrName);
+    protected final int[] mBeanIntArrayAttributeValue(String mBeanName, String mBeanAttrName) {
+        return (int[])mBeanAttributeValue(mBeanName, mBeanAttrName);
     }
 
     // ****************************** //
 
-    protected final String getMBeanStringAttributeValue(String mBeanName, String mBeanAttrName) {
-        return (String)getMBeanAttributeValue(mBeanName, mBeanAttrName);
+    protected final long mBeanLongAttributeValue(String mBeanName, String mBeanAttrName) {
+        return (long)mBeanAttributeValue(mBeanName, mBeanAttrName);
     }
 
-    protected final String[] getMBeanStringArrayAttributeValue(String mBeanName, String mBeanAttrName) {
-        return (String[])getMBeanAttributeValue(mBeanName, mBeanAttrName);
-    }
-
-    // ****************************** //
-
-    protected final TabularData getMBeanTableAttributeValue(String mBeanName, String mBeanAttrName) {
-        return (TabularData)getMBeanAttributeValue(mBeanName, mBeanAttrName);
+    protected final long[] mBeanLongArrayAttributeValue(String mBeanName, String mBeanAttrName) {
+        return (long[])mBeanAttributeValue(mBeanName, mBeanAttrName);
     }
 
     // ****************************** //
 
-    private static ObjectName makeMBeanObjectNameForMBeanName(String mBeanName) {
+    protected final String mBeanStringAttributeValue(String mBeanName, String mBeanAttrName) {
+        return (String)mBeanAttributeValue(mBeanName, mBeanAttrName);
+    }
+
+    protected final String[] mBeanStringArrayAttributeValue(String mBeanName, String mBeanAttrName) {
+        return (String[])mBeanAttributeValue(mBeanName, mBeanAttrName);
+    }
+
+    // ****************************** //
+
+    protected final TabularData mBeanTableAttributeValue(String mBeanName, String mBeanAttrName) {
+        return (TabularData)mBeanAttributeValue(mBeanName, mBeanAttrName);
+    }
+
+    // ****************************** //
+
+    static ObjectName mBeanObjectNameForMBeanName(String mBeanName) {
         try {
             return new ObjectName(WEB_APP_CONTEXT_CONFIG_LOCATION, "name", mBeanName);
         }
@@ -115,6 +120,6 @@ public abstract class MBeanTest {
 
     // ****************************** //
 
-    private static MBeanServer mBeanServer = newMBeanServer();
-    private Map<String, ObjectName> mBeanNameToMBeanObjectName = new HashMap<>();
+    static MBeanServer mBeanServer = newMBeanServer();
+    Map<String, ObjectName> mBeanNameToMBeanObjectName = new HashMap<>();
 }

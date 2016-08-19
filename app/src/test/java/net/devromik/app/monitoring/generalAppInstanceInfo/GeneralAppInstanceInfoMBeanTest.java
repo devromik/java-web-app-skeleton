@@ -17,7 +17,7 @@ import static org.junit.Assert.assertThat;
 public class GeneralAppInstanceInfoMBeanTest extends MBeanTest {
 
     @Before
-    public void beforeTest() throws OpenDataException {
+    public void beforeEachTest() throws OpenDataException {
         registerMBean(MBEAN_NAME, generalAppInstanceInfoMBean);
     }
 
@@ -25,30 +25,29 @@ public class GeneralAppInstanceInfoMBeanTest extends MBeanTest {
 
     @Test
     public void provides_Name() {
-        String actualName = getMBeanStringAttributeValue(MBEAN_NAME, "Name");
+        String actualName = mBeanStringAttributeValue(MBEAN_NAME, "Name");
         assertThat(actualName, is(AppInstanceInfo.APP_NAME));
     }
 
     @Test
     public void provides_Description() {
-        String actualDescription = getMBeanStringAttributeValue(MBEAN_NAME, "Description");
+        String actualDescription = mBeanStringAttributeValue(MBEAN_NAME, "Description");
         assertThat(actualDescription, is(AppInstanceInfo.APP_DESCRIPTION));
     }
 
     @Test
     public void provides_Version() {
-        String actualVersion = getMBeanStringAttributeValue(MBEAN_NAME, "Version");
+        String actualVersion = mBeanStringAttributeValue(MBEAN_NAME, "Version");
         assertThat(actualVersion, is(AppInstanceInfo.APP_VERSION));
     }
 
     @Test
     public void provides_Authors() {
-        String[] actualAuthors = getMBeanStringArrayAttributeValue(MBEAN_NAME, "Authors");
+        String[] actualAuthors = mBeanStringArrayAttributeValue(MBEAN_NAME, "Authors");
         assertThat(actualAuthors, is(AppInstanceInfo.APP_AUTHORS));
     }
 
     // ****************************** //
 
-    @Autowired
-    private GeneralAppInstanceInfoMBeanImpl generalAppInstanceInfoMBean;
+    @Autowired GeneralAppInstanceInfoMBeanImpl generalAppInstanceInfoMBean;
 }

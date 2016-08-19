@@ -8,7 +8,7 @@ import net.devromik.app.MandatoryJvmPropertyNotDefinedException;
  */
 public final class JvmPropertyUtils {
 
-    public static String getMandatoryJvmPropertyValue(String propertyName) {
+    public static String valueOfMandatoryJvmProperty(String propertyName) {
         String propertyValue = System.getProperty(checkNotNull(propertyName));
 
         if (propertyValue == null) {
