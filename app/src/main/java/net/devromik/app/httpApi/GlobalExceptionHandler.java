@@ -51,5 +51,5 @@ public class GlobalExceptionHandler {
 
     // ****************************** //
 
-    private static final Logger logger = getLogger(GlobalExceptionHandler.class);
+    static final Logger logger = getLogger(GlobalExceptionHandler.class);
 }

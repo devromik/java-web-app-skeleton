@@ -12,12 +12,16 @@ import static net.devromik.app.httpApi.model.Status.SUCCESS;
 @JsonDeserialize(using = AppInstanceInfoResponseJsonDeserializer.class)
 public final class AppInstanceInfoResponse extends Response {
 
+    public static final String APP_INSTANCE_INFO_JSON_ATTR_NAME = "appInstanceInfo";
+
+    // ****************************** //
+
     public AppInstanceInfoResponse(AppInstanceInfo appInstanceInfo) {
         super(SUCCESS);
         this.appInstanceInfo = appInstanceInfo;
     }
 
-    @JsonGetter("appInstanceInfo")
+    @JsonGetter(APP_INSTANCE_INFO_JSON_ATTR_NAME)
     public AppInstanceInfo appInstanceInfo() {
         return appInstanceInfo;
     }
