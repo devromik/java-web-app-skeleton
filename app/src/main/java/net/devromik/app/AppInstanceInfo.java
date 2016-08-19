@@ -2,6 +2,7 @@ package net.devromik.app;
 
 import org.joda.time.*;
 import org.joda.time.format.*;
+import com.fasterxml.jackson.annotation.JsonGetter;
 import static com.google.common.base.Preconditions.*;
 import static org.joda.time.DateTime.now;
 
@@ -13,19 +14,19 @@ public final class AppInstanceInfo {
     public static final String APP_NAME = "App";
     public static final String APP_DESCRIPTION = "App";
     public static final String APP_VERSION = "1.0";
-    public static final String DEV_BUILD = "dev build";
+    public static final String DEV_BUILD_NUMBER = "dev build";
+    public static final String APP_LOCAL_START_UP_DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
     public static final String[] APP_AUTHORS = {
         "Roman Shulnyaev"
     };
 
-    public static final String APP_LOCAL_START_UP_DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
     public static final String APP_HTTP_API_URI_PREFIX = "/api";
 
     // ****************************** //
 
     public AppInstanceInfo() {
-        this(now(), DEV_BUILD);
+        this(now(), DEV_BUILD_NUMBER);
     }
 
     public AppInstanceInfo(DateTime localStartUpTime, String buildNumber) {
@@ -35,32 +36,38 @@ public final class AppInstanceInfo {
 
     // ****************************** //
 
-    public String getName() {
+    @JsonGetter("name")
+    public String name() {
         return APP_NAME;
     }
 
-    public String getDescription() {
+    @JsonGetter("description")
+    public String description() {
         return APP_DESCRIPTION;
     }
 
-    public String getVersion() {
+    @JsonGetter("version")
+    public String version() {
         return APP_VERSION;
     }
 
-    public String getBuildNumber() {
+    @JsonGetter("buildNumber")
+    public String buildNumber() {
         return buildNumber;
     }
 
-    public String getLocalStartUpTime() {
+    @JsonGetter("localStartUpTime")
+    public String localStartUpTime() {
         return localStartUpTime.toString(DateTimeFormat.forPattern(APP_LOCAL_START_UP_DATE_TIME_FORMAT));
     }
 
-    public String[] getAuthors() {
+    @JsonGetter("authors")
+    public String[] authors() {
         return APP_AUTHORS;
     }
 
     // ****************************** //
 
-    private final DateTime localStartUpTime;
-    private final String buildNumber;
+    final DateTime localStartUpTime;
+    final String buildNumber;
 }

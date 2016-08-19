@@ -4,6 +4,7 @@ import java.io.IOException;
 import javax.servlet.DispatcherType;
 import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.servlet.*;
+import org.joda.time.DateTime;
 import org.slf4j.*;
 import org.springframework.web.context.*;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
@@ -16,6 +17,7 @@ import static net.devromik.slf4jUtils.Slf4jUtils.logException;
 import static net.devromik.app.AppInstanceInfo.APP_NAME;
 import static net.devromik.app.utils.net.LocalhostInfo.getLocalhost;
 import static org.eclipse.jetty.util.resource.Resource.newClassPathResource;
+import static org.joda.time.DateTime.now;
 import static org.slf4j.LoggerFactory.getLogger;
 
 /**
@@ -70,6 +72,10 @@ public final class Launcher {
         catch (Exception exception) {
             handleLaunch(exception);
         }
+    }
+
+    public static DateTime localStartUpTime() {
+        return localStartUpTime;
     }
 
     static void handleLaunch(Exception exception) {
@@ -149,5 +155,7 @@ public final class Launcher {
     // ****************************** //
 
     static Server server;
+    static final DateTime localStartUpTime = now();
+
     static final Logger logger = getLogger(Launcher.class);
 }

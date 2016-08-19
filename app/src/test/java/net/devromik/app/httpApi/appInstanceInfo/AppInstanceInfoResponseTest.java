@@ -16,13 +16,13 @@ public class AppInstanceInfoResponseTest {
         AppInstanceInfo info = new AppInstanceInfo(localStartUpTime, "dev build");
         AppInstanceInfoResponse response = new AppInstanceInfoResponse(info);
         AppInstanceInfoResponse deserializedResponse = fromJson(toJson(response), AppInstanceInfoResponse.class);
-        AppInstanceInfo deserializedInfo = deserializedResponse.getAppInstanceInfo();
+        AppInstanceInfo deserializedInfo = deserializedResponse.appInstanceInfo();
 
-        assertThat(deserializedInfo.getName(), is(info.getName()));
-        assertThat(deserializedInfo.getDescription(), is(info.getDescription()));
-        assertThat(deserializedInfo.getVersion(), is(info.getVersion()));
-        assertThat(deserializedInfo.getBuildNumber(), is(info.getBuildNumber()));
-        assertThat(deserializedInfo.getLocalStartUpTime(), is(info.getLocalStartUpTime()));
-        assertThat(deserializedInfo.getAuthors(), is(info.getAuthors()));
+        assertThat(deserializedInfo.name(), is(info.name()));
+        assertThat(deserializedInfo.description(), is(info.description()));
+        assertThat(deserializedInfo.version(), is(info.version()));
+        assertThat(deserializedInfo.buildNumber(), is(info.buildNumber()));
+        assertThat(deserializedInfo.localStartUpTime(), is(info.localStartUpTime()));
+        assertThat(deserializedInfo.authors(), is(info.authors()));
     }
 }

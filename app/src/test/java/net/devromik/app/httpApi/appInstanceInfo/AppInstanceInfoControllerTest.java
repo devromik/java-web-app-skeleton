@@ -21,15 +21,15 @@ public class AppInstanceInfoControllerTest {
         controller.environment = environment;
         controller.init();
 
-        AppInstanceInfoResponse response = controller.getAppInstanceInfo();
+        AppInstanceInfoResponse response = controller.appInstanceInfo();
         assertThat(response.getStatus(), is(Status.SUCCESS));
 
         AppInstanceInfo expectedInfo = new AppInstanceInfo(now() /* is not taken into account */, "App X.X");
 
-        assertThat(response.getAppInstanceInfo().getName(), is(expectedInfo.getName()));
-        assertThat(response.getAppInstanceInfo().getDescription(), is(expectedInfo.getDescription()));
-        assertThat(response.getAppInstanceInfo().getVersion(), is(expectedInfo.getVersion()));
-        assertThat(response.getAppInstanceInfo().getBuildNumber(), is(expectedInfo.getBuildNumber()));
-        assertThat(response.getAppInstanceInfo().getAuthors(), is(expectedInfo.getAuthors()));
+        assertThat(response.appInstanceInfo().name(), is(expectedInfo.name()));
+        assertThat(response.appInstanceInfo().description(), is(expectedInfo.description()));
+        assertThat(response.appInstanceInfo().version(), is(expectedInfo.version()));
+        assertThat(response.appInstanceInfo().buildNumber(), is(expectedInfo.buildNumber()));
+        assertThat(response.appInstanceInfo().authors(), is(expectedInfo.authors()));
     }
 }
